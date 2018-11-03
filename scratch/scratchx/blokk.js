@@ -11,7 +11,7 @@
     ext.get_bulb = function(bulbId, callback) {
         // Make an AJAX call to the Open Weather Maps API
         $.ajax({
-            url: 'https://127.0.0.1:8443/bulb'+bulbId,
+            url: 'https://127.0.0.1:8443/bulb/'+bulbId,
             dataType: 'jsonp',
             success: function( bulb_data ) {
                 // Got the data - parse it and return the temperature
