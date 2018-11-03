@@ -12,7 +12,7 @@
         // Make an AJAX call to the Open Weather Maps API
         $.ajax({
             url: 'https://127.0.0.1:8443/bulb/'+bulbId,
-            dataType: 'jsonp',
+            dataType: 'json',
             success: function( bulb_data ) {
                 // Got the data - parse it and return the temperature
                 bulbName = bulb_data['name'];
@@ -24,7 +24,7 @@
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-            ['R', 'name bulb %s', 'get_bulb', '65561'],
+            ['R', 'name bulb %s', 'get_bulb', '65561']
         ]
     };
 
