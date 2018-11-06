@@ -2,7 +2,11 @@
 
     var bulbs = null;  // An array of bulbs
     var bulbNames = [];
+    var bulbIds = [];
 
+    /**
+     * Pre-fetch bulbs to populate menu with bulb names
+     */
     if (bulbs == null) {
         $.ajax({
             url: 'https://127.0.0.1:8443/bulbs',
@@ -14,7 +18,9 @@
 
                 $.each(bulbs_data, function(key, value){
                     console.log(value["name"]) ;
+                    console.log("---" + value["id"]) ;
                     bulbNames.push(value["name"]);
+                    bulbIds.push(value["id"]);
                 });
 
                 console.log("bulb names " + bulbNames.toString());
@@ -22,11 +28,13 @@
             }
         });
     }
-    
-    // Block and block menu descriptions
+
+    /**
+     * Block and block menu descriptions
+     */
     var descriptor = {
         blocks: [
-            ['R', 'name bulb %s', 'get_bulb', '65561'],
+            ['R', 'name bulb %m.lightIds', 'get_bulb', bulbIds[0]],
             [' ', 'turn lights %m.lightSwitchState', 'setLightSwitchStates', 'on'],
             [' ', 'turn light %m.lights %m.lightSwitchState', 'setLightSwitchState', bulbNames[0], 'on']
         ],
@@ -35,6 +43,7 @@
             lessMore: ['<', '>'],
             eNe: ['=', 'not ='],
             lights: bulbNames
+            ,lightIds: bulbIds
         },
         url: 'https://github.com/steni/lys',
         displayName: 'IKEA Trådfri'
@@ -46,8 +55,12 @@
         return {status: 2, msg: 'Ready'};
     };
 
+    /**
+     * get the specific bulb and return its name
+     * @param bulbId - the bulb's id
+     * @param callback - the function to callback with the name
+     */
     ext.get_bulb = function (bulbId, callback) {
-        // get the specific bulb
         $.ajax({
             url: 'https://127.0.0.1:8443/bulb/' + bulbId,
             dataType: 'json',
@@ -58,7 +71,11 @@
         });
     };
 
-    // set state (on/off) in one lightSwitch
+    /**
+     * set state (on/off) for one bulb (by name or id)
+     * @param bulbId - name or id of bulb
+     * @param lightSwitchState - on or off
+     */
     ext.setLightSwitchState = function (bulbId, lightSwitchState) {
         console.log(bulbId + ': ' + lightSwitchState);
         var url = "https://127.0.0.1:8443/bulb/" + bulbId + "/" + lightSwitchState;
@@ -73,6 +90,10 @@
         });
     };
 
+    /**
+     * Turn all lights on or off
+     * @param lightSwitchState - on / off
+     */
     ext.setLightSwitchStates = function (lightSwitchState) {
         console.log(lightSwitchState);
         var url = "https://127.0.0.1:8443/bulbs/" + lightSwitchState;
